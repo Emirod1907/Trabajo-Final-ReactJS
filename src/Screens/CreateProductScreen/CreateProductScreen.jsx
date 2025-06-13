@@ -1,6 +1,7 @@
 import { addDoc, collection } from 'firebase/firestore'
 import React, { useState } from 'react'
 import database from '../../../config/firebase'
+import Navbar from '../../Components/NavBar/Navbar'
 
 const CreateProductScreen = () => {
     let initial_state_form = {
@@ -75,6 +76,7 @@ const CreateProductScreen = () => {
     }
     return (
     <div>
+        <div><Navbar/></div>
         <h1>Crea tu producto</h1>
         <form onSubmit={handleSubmit}>
             <div>
@@ -107,7 +109,7 @@ const CreateProductScreen = () => {
                     name="final_price" 
                     id="final_price" 
                     required
-                    value={form_state.final_price}
+                    value={form_state.final_price= form_state.real_price-form_state.real_price*(form_state.discount/100)}
                     onChange={handleChange}
                     />
                 </div>
