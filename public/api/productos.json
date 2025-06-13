@@ -1,0 +1,47 @@
+[
+    {
+        "id": 1,
+        "title":"Aloe Vera",
+        "real_price": 3599,
+        "final_price": 3139,
+        "discount": 10,
+        "img":"https://www.ikea.com/mx/es/images/products/aloe-vera-planta-en-maceta-aloe__0653978_pe708207_s5.jpg",
+        "description":"El aloe vera, también conocido como sábila, es una planta con múltiples beneficios para la salud y el bienestar, tanto para la piel como para el interior del cuerpo. Sus propiedades incluyen hidratación, cicatrización, antiinflamación, alivio del dolor, y apoyo a la digestión, entre otros"
+    },
+    {
+        "id":2,
+        "title":"Begonia Plata",
+        "real_price": 7899,
+        "final_price": 6714,
+        "discount": 15,
+        "img":"https://www.antderground.com/wp-content/uploads/2025/03/Begonia-Rex-Silver.jpeg",
+        "description":"Las begonias ofrecen diversos beneficios, tanto estéticos como medicinales. Estéticamente, embellecen los espacios con sus colores vibrantes y hojas decorativas. Medicinalmente, se han utilizado tradicionalmente para tratar problemas como inflamaciones, artritis, várices, quemaduras y úlceras gástricas, además de promover la circulación sanguínea. También se cree que ayudan a eliminar toxinas del cuerpo y a combatir catarros y gripes."
+    },
+    {
+        "id":3,
+        "title":"Cuna de Moises",
+        "real_price": 14999,
+        "final_price": 11999,
+        "discount": 20,
+        "img":"https://cdn.homedepot.com.mx/productos/211064/211064-d.jpg",
+        "description":"La Cuna de Moisés, también conocida como lirio de la paz, ofrece varios beneficios para la salud y el bienestar, especialmente en interiores. Principalmente, purifica el aire al absorber contaminantes y transformar el dióxido de carbono en oxígeno. Además, puede aumentar la humedad ambiental, lo que es beneficioso para la salud respiratoria y el descanso. También se cree que contribuye a la reducción del estrés y la ansiedad, creando un ambiente más relajante. "
+    },
+    {
+        "id":4,
+        "title":"Monstera deliciosa",
+        "real_price": 19999,
+        "final_price": 17999,
+        "discount": 10,
+        "img":"https://dcdn-us.mitiendanube.com/stores/201/985/products/monstera-deliciosa-gota-57351cc946eca96da417169292908088-640-0.jpg",
+        "description":"Purifica y elimina toxinas del aire creando un ambiente más fresco y saludable. Según el Feng shui se cree que esta planta representa la expansión, el crecimiento ascendente y la energía positiva. Por lo que además de traer salud, también es un imán del dinero y la felicidad."
+    },
+    {
+        "id":5,
+        "title":"Lavanda",
+        "real_price": 23999,
+        "final_price": 15599,
+        "discount": 35,
+        "img":"https://http2.mlstatic.com/D_NQ_NP_718296-MPE81940743827_012025-O-planta-planta-de-lavanda-sin-flores.webp",
+        "description":"La lavanda ofrece múltiples beneficios para la salud, tanto física como mental. Es conocida por sus propiedades relajantes, analgésicas y antiinflamatorias, además de ser utilizada en aromaterapia para mejorar el estado de ánimo y facilitar el sueño. "
+    }
+]

@@ -1,0 +1,145 @@
+import { addDoc, collection } from 'firebase/firestore'
+import React, { useState } from 'react'
+import database from '../../../config/firebase'
+
+const CreateProductScreen = () => {
+    let initial_state_form = {
+        title:'',
+        real_price: 0,
+        final_price: 0,
+        discount: 0,
+        img: null,
+    }
+    const [form_state, setFormState] = useState(initial_state_form)
+    const [loading, setLoading] = useState(false)
+
+    const handleChange = (event) =>{
+        let field = event.target.name
+        let new_value = event.target.value
+        if(field === 'img'){
+            setFormState(
+                (prev_state) =>{
+                    return{
+                        ...prev_state,
+                        'img': event.target.files[0]
+                    }
+                }
+            )
+        }
+        else{
+            setFormState(
+                (prev_state) => {
+                    return {
+                    ...prev_state, 
+                    [field]: new_value
+                    }
+                }
+            )
+        }
+    }
+    const uploadImgToImgBB = async(img_file) =>{
+        let API_KEY_IMGBB= '26c5a59f4d3c46da1f28367e1519bfd6'
+        const form_data = new FormData()
+        form_data.append('image',img_file)
+        const response = await fetch(
+            `https://api.imgbb.com/1/upload?key=${API_KEY_IMGBB}`,
+            {
+                method: 'POST',
+                body: form_data
+            }
+        )
+        const data = await response.json()
+        console.log('Respuesta de IMGBB:', data)
+        return data.data.url
+    }
+
+    const handleSubmit = async (event) =>{
+        event.preventDefault()
+        setLoading(true)
+
+        const url_img = await uploadImgToImgBB(form_state.img)
+        console.log(url_img)
+        const collection_reference = collection(database, 'products')
+        await addDoc(
+            collection_reference,
+            {
+                title: form_state.title,
+                real_price: form_state.real_price,
+                final_price: form_state.final_price,
+                discount: form_state.discount,
+                img: url_img
+            }
+        )
+        setFormState(initial_state_form)
+        setLoading(false)
+    }
+    return (
+    <div>
+        <h1>Crea tu producto</h1>
+        <form onSubmit={handleSubmit}>
+            <div>
+                <div>
+                    <label htmlFor="title">Titulo del Producto</label>
+                    <input 
+                    type="text" 
+                    name="title" 
+                    id="title" 
+                    required 
+                    value = {form_state.title}
+                    onChange={handleChange}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="real_price">Precio real del Producto</label>
+                    <input 
+                    type="number" 
+                    name="real_price" 
+                    id="real_price" 
+                    required
+                    value={form_state.real_price}
+                    onChange={handleChange}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="final_price">Precio Final del Producto</label>
+                    <input 
+                    type="number" 
+                    name="final_price" 
+                    id="final_price" 
+                    required
+                    value={form_state.final_price}
+                    onChange={handleChange}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="discount">Descuento del Producto</label>
+                    <input 
+                    type="number" 
+                    name="discount" 
+                    id="discount" 
+                    required
+                    max={99}
+                    value={form_state.discount}
+                    onChange={handleChange}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="img">Imagen del Producto</label>
+                    <input 
+                    type="file" 
+                    name="img" 
+                    id="img" 
+                    required
+                    onChange={handleChange}
+                    />
+                </div>
+                <div><button 
+                type='submit'
+                disabled={loading}>{ loading ? "Creando producto" :"Crear Producto"}</button></div>
+            </div>
+        </form>
+    </div>
+  )
+}
+
+export default CreateProductScreen

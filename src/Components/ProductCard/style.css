@@ -1,0 +1,52 @@
+
+.conteiner{
+    position: relative;
+    background-color: var(--color-grey-primary);
+    margin: 1rem;
+    flex: 1 0 25rem;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%; 
+    box-sizing: border-box;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color:steelblue;
+}
+.discount{
+    background: red;
+}
+.real_price{
+    text-decoration: line-through;
+    background-color: #4a4a4a;
+}
+span{
+    margin: 2px;
+    padding: 5px;
+    border-radius: 3px;
+    box-sizing: border-box;
+    border: 1px solid black;
+    height: fit-content;
+}
+.price_info{
+    align-items: left;
+    display: flex;
+    justify-content: center;
+}
+.final_price{
+    background-color:white;
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+img{
+    width: 220px;
+    height: 200px;
+    overflow: hidden;
+    object-fit: cover;
+}
+h3{
+    position:relative;
+    display: flex;
+    /*justify-content: left;*/
+    align-items: center;
+}
