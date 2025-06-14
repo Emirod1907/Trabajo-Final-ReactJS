@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ProductCard from '../ProductCard/ProductCard'
 import getProducts from '../../services/productService'
 import Navbar from '../NavBar/Navbar'
+import './style.css'
 
 const ProductList = () => {
     const [products, setProducts]= useState([])
@@ -34,7 +35,6 @@ const ProductList = () => {
      
     const componentes = products.map(
         (product)=>{
-            console.log('me ejecuto', product)
             return <ProductCard {...product} key={product.id}/>
         }
     )
@@ -47,7 +47,11 @@ const ProductList = () => {
         content=<h2>{error}</h2>
         }
         else{
-            content=componentes
+                content=(
+                    <div className='product-grid'>
+                        {componentes}
+                    </div>
+                    )
         }
     }
 

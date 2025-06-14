@@ -65,7 +65,9 @@ const ProductDetailScreen = () => {
   return (
     <div>
         <Navbar/>
-        {content}
+        <div className='product-detail-conteiner'>
+            {content}
+        </div>
     </div>
   )
 }

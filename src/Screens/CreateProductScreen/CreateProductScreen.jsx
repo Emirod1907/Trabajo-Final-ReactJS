@@ -77,10 +77,11 @@ const CreateProductScreen = () => {
     return (
     <div>
         <div><Navbar/></div>
-        <h1>Crea tu producto</h1>
-        <form onSubmit={handleSubmit}>
+        <div className='container'>
+        <form className='form-container' onSubmit={handleSubmit}>
+            <h1>Crea tu producto</h1>
             <div>
-                <div>
+                <div className='input-group'>
                     <label htmlFor="title">Titulo del Producto</label>
                     <input 
                     type="text" 
@@ -91,7 +92,7 @@ const CreateProductScreen = () => {
                     onChange={handleChange}
                     />
                 </div>
-                <div>
+                <div className='input-group'>
                     <label htmlFor="real_price">Precio real del Producto</label>
                     <input 
                     type="number" 
@@ -102,7 +103,7 @@ const CreateProductScreen = () => {
                     onChange={handleChange}
                     />
                 </div>
-                <div>
+                <div className='input-group'>
                     <label htmlFor="final_price">Precio Final del Producto</label>
                     <input 
                     type="number" 
@@ -113,7 +114,7 @@ const CreateProductScreen = () => {
                     onChange={handleChange}
                     />
                 </div>
-                <div>
+                <div className='input-group'>
                     <label htmlFor="discount">Descuento del Producto</label>
                     <input 
                     type="number" 
@@ -125,7 +126,7 @@ const CreateProductScreen = () => {
                     onChange={handleChange}
                     />
                 </div>
-                <div>
+                <div className='input-group'>
                     <label htmlFor="img">Imagen del Producto</label>
                     <input 
                     type="file" 
@@ -136,10 +137,12 @@ const CreateProductScreen = () => {
                     />
                 </div>
                 <div><button 
+                className='submit-button'
                 type='submit'
                 disabled={loading}>{ loading ? "Creando producto" :"Crear Producto"}</button></div>
             </div>
         </form>
+        </div>
     </div>
   )
 }

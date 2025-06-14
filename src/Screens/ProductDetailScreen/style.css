@@ -1,3 +1,9 @@
+.product-detail-conteiner{
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 0 20px;
+    background-color: #4a4a4a;
+}
 .conteiner{
     display: grid; 
     grid-template-columns: 1fr 1fr; 
@@ -7,6 +13,7 @@
     box-sizing: border-box;
     border: 1px solid black;
     padding: 15px;
+    justify-content: center;
 }
 .discount{
     background: red;
