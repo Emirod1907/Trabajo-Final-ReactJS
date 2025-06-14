@@ -9,6 +9,7 @@ const CreateProductScreen = () => {
         real_price: 0,
         final_price: 0,
         discount: 0,
+        description:'',
         img: null,
     }
     const [form_state, setFormState] = useState(initial_state_form)
@@ -68,9 +69,11 @@ const CreateProductScreen = () => {
                 real_price: form_state.real_price,
                 final_price: form_state.final_price,
                 discount: form_state.discount,
+                description: form_state.description,
                 img: url_img
             }
         )
+        alert("Producto creado exitosamente!!")
         setFormState(initial_state_form)
         setLoading(false)
     }
@@ -126,6 +129,18 @@ const CreateProductScreen = () => {
                     onChange={handleChange}
                     />
                 </div>
+                    <div className='input-group'>
+                    <label htmlFor="description">Descripción del Producto</label>
+                    <input 
+                    type="text" 
+                    name="description" 
+                    id="description" 
+                    required
+                    max={100}
+                    value={form_state.description}
+                    onChange={handleChange}
+                    />
+                </div>
                 <div className='input-group'>
                     <label htmlFor="img">Imagen del Producto</label>
                     <input 
@@ -137,6 +152,7 @@ const CreateProductScreen = () => {
                     />
                 </div>
                 <div><button 
+                onSubmit={handleSubmit}
                 className='submit-button'
                 type='submit'
                 disabled={loading}>{ loading ? "Creando producto" :"Crear Producto"}</button></div>
