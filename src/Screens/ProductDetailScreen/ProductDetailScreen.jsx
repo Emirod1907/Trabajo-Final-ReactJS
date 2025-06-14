@@ -10,7 +10,7 @@ const ProductDetailScreen = () => {
     const [loading, setLoading]=useState(true)
     const [error, setError]= useState(false)
     const {product_id} = useParams()
-    console.log(product_id)
+    console.log("Product ID:"+product_id)
 
     const getProductDetail = async()=>
         {
@@ -57,7 +57,7 @@ const ProductDetailScreen = () => {
                 </div>
                 <span className='final_price'>${products.final_price}</span>
                 <div className='description'>${products.description}</div>
-                <BotonComprar title={products.title}/>
+                <BotonComprar productTitle={products.title}/>
             </div>
         }
     }

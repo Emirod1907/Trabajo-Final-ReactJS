@@ -6,16 +6,15 @@ const ESTADOS_DISPONIBLES = Object.freeze({
     CARGANDO: 'CARGANDO'
 })
 
-const BotonComprar = ({title}) => {
+const BotonComprar = ({productTitle}) => {
     const initial_state= ESTADOS_DISPONIBLES.NO_COMPRADO
     const[estado_boton, setEstadoBoton]= useState(initial_state)
-    const item = {title}
 
     const comprar =()=>{
         setEstadoBoton(ESTADOS_DISPONIBLES.CARGANDO)
         setTimeout(() => {
             setEstadoBoton(ESTADOS_DISPONIBLES.COMPRADO)
-            alert(' felicitaciones has comprado el item:'+item)
+            alert(`felicitaciones has comprado el item: ${productTitle}` )
         }, 1500);
     }
 
