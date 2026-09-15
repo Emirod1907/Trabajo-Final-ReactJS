@@ -40,11 +40,11 @@ const ProductList = () => {
     )
     let content
     if(loading){
-        content = <h2>Cargando...</h2>
+        content = <h2 className='product-list__message'>Cargando...</h2>
     }
     else {
         if(error){
-        content=<h2>{error}</h2>
+        content=<h2 className='product-list__message'>{error}</h2>
         }
         else{
                 content=(

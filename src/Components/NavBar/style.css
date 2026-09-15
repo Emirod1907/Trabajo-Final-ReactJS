@@ -1,22 +1,26 @@
-.navbar-header{
+.navbar_header{
     display: flex;
     width: 100%;
+    background-color: rgb(47, 255, 109);
     padding: 10px 0;
     justify-content: center;
+    box-sizing: border-box;
 }
-nav{
-display: flex;
-background-color: rgb(47, 255, 109);
-gap: 30px;
+.navbar_nav{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
 }
-.link{
-display: flex;
-flex-direction: column;
-margin: 10px;
-padding: 5px;
-border: 20px;
-border: solid 1px #000000;
+.navbar_nav .link{
+    padding: 8px 16px;
+    border: solid 1px #000000;
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: #2f2f2f;
+    font-weight: bold;
+    text-decoration: none;
 }
-.link:hover{
-    background-color:rgb(130, 238, 233);
+.navbar_nav .link:hover{
+    background-color: rgb(130, 238, 233);
 }

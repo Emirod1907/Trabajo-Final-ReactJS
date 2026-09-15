@@ -2,7 +2,12 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 25px;
-    margin: 6% auto;
+    margin: 40px auto;
     max-width: 1200px;
     padding: 0 20px;
+    box-sizing: border-box;
+}
+.product-list__message{
+    text-align: center;
+    margin: 40px 0;
 }

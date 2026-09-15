@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import './style.css'
 
 const ESTADOS_DISPONIBLES = Object.freeze({
     NO_COMPRADO: 'NO_COMPRADO',
@@ -32,7 +33,7 @@ const BotonComprar = ({productTitle}) => {
         content= <button disabled>Comprado</button>
     }
   return (
-    <div>
+    <div className='boton_comprar'>
         {content}
         <button onClick={reset}
         disabled={estado_boton === ESTADOS_DISPONIBLES.CARGANDO|| estado_boton=== ESTADOS_DISPONIBLES.NO_COMPRADO}>reset</button>

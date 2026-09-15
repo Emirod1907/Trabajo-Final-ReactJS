@@ -1,29 +1,57 @@
-
-.conteiner{
-    align-items: center;
-    text-align: center;
-    position: relative;
-    width: calc(25% - 40px);
-    min-width: 250px;
-    height: auto;
-    margin: 15px;
-    box-shadow: 0 2px 20px rgba(0,0,0,0.5);
-    transition: box-shadow 0.3 ease;
-    overflow: hidden;
-    background: #576ce7;
+.product-card{
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: 100%;
     padding: 15px;
     box-sizing: border-box;
+    border-radius: 8px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.5);
+    transition: box-shadow 0.3s ease;
+    overflow: hidden;
+    background: #576ce7;
 }
-.discount{
-    background: red;
+.product-card:hover{
+    box-shadow: 0 4px 25px rgba(0,0,0,0.7);
 }
-.real_price{
-    text-decoration: line-through;
-    background-color: #4a4a4a;
+.product-card__image{
+    width: 100%;
+    background: #ffffff;
+    border-radius: 6px;
+    overflow: hidden;
 }
-span{
+.product-card__image img{
+    display: block;
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+}
+.product-card__title{
+    margin: 12px 0;
+    font-size: 1.1rem;
+    color: #ffffff;
+    /* deja todos los titulos a la misma altura, tengan 1 o 2 lineas */
+    min-height: 2.6em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* empuja precios y botones al pie de la tarjeta */
+.product-card__prices{
+    margin-top: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+.product-card .price_info{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.product-card span{
     margin: 2px;
     padding: 5px;
     border-radius: 3px;
@@ -31,25 +59,28 @@ span{
     border: 1px solid black;
     height: fit-content;
 }
-.price_info{
-    align-items: left;
-    display: flex;
-    justify-content: center;
+.product-card .real_price{
+    text-decoration: line-through;
+    background-color: #4a4a4a;
+    color: #ffffff;
 }
-.final_price{
-    background-color:rgb(153, 231, 153);
+.product-card .discount{
+    background: red;
+    color: #ffffff;
+}
+.product-card .final_price{
+    background-color: rgb(153, 231, 153);
     font-weight: bold;
     font-size: 1.3rem;
 }
-img{
-    width: 220px;
-    height: 200px;
-    overflow: hidden;
-    object-fit: cover;
-}
-h3{
-    position:relative;
+.product-card__actions{
+    width: 100%;
+    margin-top: 12px;
     display: flex;
-    /*justify-content: left;*/
+    flex-direction: column;
     align-items: center;
+    gap: 10px;
+}
+.product-card__link{
+    color: #ffffff;
 }

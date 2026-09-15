@@ -1,0 +1,21 @@
+.boton_comprar{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+.boton_comprar button{
+    padding: 8px 16px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    background-color: #ffffff;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+.boton_comprar button:hover:enabled{
+    background-color: rgb(130, 238, 233);
+}
+.boton_comprar button:disabled{
+    opacity: 0.6;
+    cursor: not-allowed;
+}

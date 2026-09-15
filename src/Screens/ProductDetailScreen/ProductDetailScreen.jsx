@@ -46,17 +46,19 @@ const ProductDetailScreen = () => {
             }
         else if(products){
             content= 
-            <div className='conteiner'>
+            <div className='product-detail'>
                 <h1> {products.title} </h1>
                 <div className='img-conteiner'>
-                    <img src={products.img}/>
+                    <img src={products.img} alt={products.title}/>
                 </div>
-                <div className='price_info'>
-                    <span className="real_price">${products.real_price}</span>
-                    <span className="discount">%{products.discount}</span>
+                <div className='product-detail__info'>
+                    <div className='price_info'>
+                        <span className="real_price">${products.real_price}</span>
+                        <span className="discount">%{products.discount}</span>
+                    </div>
+                    <span className='final_price'>${products.final_price}</span>
+                    <div className='description'>{products.description}</div>
                 </div>
-                <span className='final_price'>${products.final_price}</span>
-                <div className='description'>${products.description}</div>
                 <BotonComprar productTitle={products.title}/>
             </div>
         }
