@@ -1,7 +1,7 @@
 # Tienda Online — React + Firebase
 
-E-commerce desarrollado con React y Vite, con catálogo de productos, registro y autenticación
-de usuarios, y persistencia de datos en Firebase Firestore.
+E-commerce desarrollado con React y Vite, con catálogo de productos servido desde Firebase
+Firestore y alta de artículos con carga de imágenes.
 
 **Demo:** https://trabajo-final-react-js.vercel.app
 
@@ -11,14 +11,23 @@ de usuarios, y persistencia de datos en Firebase Firestore.
 
 ## Funcionalidades
 
-- **Catálogo de productos** — listado con imagen, título, precio real, precio final y descuento.
-- **Detalle de producto** — vista individual con la información completa del artículo.
-- **Registro de usuarios** — alta de cuenta con nombre, apellido, email y contraseña.
-- **Login** — autenticación por email y contraseña mediante Firebase Authentication.
-- **Alta de productos** — formulario para cargar nuevos artículos al catálogo.
-- **Manejo de estado de compra** — acción para marcar un producto como comprado y reinicio al
-  estado inicial, con re-renderizado reactivo de la interfaz.
-- **Persistencia** — el catálogo y las cuentas se almacenan en Firebase; no hay datos mockeados.
+- **Catálogo de productos** — listado en grilla responsive con imagen, título, precio de lista,
+  descuento y precio final, leído desde Firestore.
+- **Detalle de producto** — vista individual por ruta dinámica (`/producto/:product_id`) con la
+  descripción completa del artículo.
+- **Alta de productos** — formulario que sube la imagen a ImgBB, calcula el precio final a partir
+  del descuento y persiste el producto en Firestore.
+- **Manejo de estado de compra** — botón que pasa por los estados *no comprado → cargando →
+  comprado* y un botón de reinicio, con re-renderizado reactivo.
+- **Estados de carga y error** — el listado y el detalle muestran *Cargando...* mientras resuelven
+  y un mensaje de error si la consulta falla.
+
+### Alcance actual
+
+Las pantallas de **Registro** y **Login** están maquetadas pero **no tienen lógica**: sus
+formularios no envían datos ni validan campos, y el proyecto no integra Firebase Authentication.
+Son la base visual sobre la que se implementará la autenticación, que figura en las mejoras
+pendientes.
 
 ---
 
@@ -26,11 +35,11 @@ de usuarios, y persistencia de datos en Firebase Firestore.
 
 | Capa | Tecnología |
 |---|---|
-| Frontend | React 18, Vite |
-| Ruteo | React Router |
-| Base de datos | Firebase Firestore |
-| Autenticación | Firebase Authentication |
-| Estilos | CSS |
+| Frontend | React 19, Vite 6 |
+| Ruteo | React Router 7 |
+| Base de datos | Firebase Firestore 11 |
+| Hosting de imágenes | ImgBB (API REST) |
+| Estilos | CSS plano, un archivo por componente |
 | Despliegue | Vercel |
 
 ---
@@ -41,7 +50,7 @@ de usuarios, y persistencia de datos en Firebase Firestore.
 
 - Node.js 18 o superior
 - npm
-- Un proyecto de Firebase con Firestore y Authentication habilitados
+- Un proyecto de Firebase con Firestore habilitado
 
 ### Pasos
 
@@ -53,32 +62,16 @@ cd Trabajo-Final-ReactJS
 # 2. Instalar dependencias
 npm install
 
-# 3. Configurar las variables de entorno
-cp .env.example .env
-# Completar el archivo .env con las credenciales del proyecto de Firebase
-
-# 4. Levantar el servidor de desarrollo
+# 3. Levantar el servidor de desarrollo
 npm run dev
 ```
 
 La aplicación queda disponible en `http://localhost:5173`.
 
-### Variables de entorno
-
-```
-VITE_FIREBASE_API_KEY=
-VITE_FIREBASE_AUTH_DOMAIN=
-VITE_FIREBASE_PROJECT_ID=
-VITE_FIREBASE_STORAGE_BUCKET=
-VITE_FIREBASE_MESSAGING_SENDER_ID=
-VITE_FIREBASE_APP_ID=
-```
-
-Estos valores se obtienen en la consola de Firebase, en *Configuración del proyecto → Tus aplicaciones*.
-
-> **Nota:** Vite reemplaza las variables `VITE_*` durante el build, no en tiempo de ejecución.
-> Al desplegar en Vercel hay que cargarlas en el panel del proyecto y **volver a desplegar**
-> para que tomen efecto.
+No hace falta configurar variables de entorno: la configuración de Firebase está incluida en
+`config/firebase.js` y el proyecto apunta a una base ya poblada. Para usar una base propia hay que
+reemplazar ese objeto de configuración por el del proyecto de Firebase correspondiente
+(*Configuración del proyecto → Tus aplicaciones* en la consola).
 
 ### Build de producción
 
@@ -89,6 +82,25 @@ npm run preview   # sirve el build localmente para verificarlo
 
 ---
 
+## Rutas
+
+| Ruta | Pantalla | Estado |
+|---|---|---|
+| `/` | Catálogo de productos | Funcional |
+| `/producto/:product_id` | Detalle del producto | Funcional |
+| `/product/new` | Alta de producto | Funcional |
+| `/registro` | Registro de usuario | Solo maqueta |
+| `/login` | Inicio de sesión | Solo maqueta |
+
+`ContactScreen` está implementada como componente pero todavía no tiene una ruta asignada, así que
+no es alcanzable desde la aplicación.
+
+El archivo `vercel.json` reescribe todas las peticiones hacia `/` para que las rutas del ruteador
+no devuelvan 404 al recargar la página o al entrar por un enlace directo, que es el comportamiento
+por defecto de un hosting estático frente a una SPA.
+
+---
+
 ## Modelo de datos
 
 Colección `products` en Firestore:
@@ -96,26 +108,73 @@ Colección `products` en Firestore:
 | Campo | Tipo | Descripción |
 |---|---|---|
 | `title` | string | Nombre del producto |
-| `real_price` | string | Precio de lista |
-| `final_price` | number | Precio con descuento aplicado |
-| `discount` | string | Porcentaje de descuento |
-| `img` | string | URL de la imagen |
+| `real_price` | string \| number | Precio de lista |
+| `discount` | string \| number | Porcentaje de descuento |
+| `final_price` | number | Precio con el descuento ya aplicado |
+| `description` | string | Descripción del artículo |
+| `img` | string | URL pública de la imagen en ImgBB |
 
-Los usuarios no se almacenan en Firestore: los gestiona **Firebase Authentication**, que mantiene
-su propio almacén de cuentas (email, contraseña hasheada y UID).
+Los tipos de `real_price` y `discount` son mixtos según el origen del documento: los cargados a
+mano desde la consola de Firebase quedaron como números, mientras que los que crea el formulario
+se guardan como cadenas, porque el valor de un `<input>` en el DOM siempre es texto y no se
+convierte antes de escribir. No rompe la aplicación —esos campos solo se muestran— pero impide
+ordenar o filtrar por precio del lado del servidor, y está anotado en las mejoras pendientes.
+
+No existe colección de usuarios: no hay registro ni autenticación implementados.
 
 ---
 
 ## Decisiones técnicas
 
-**Reglas de seguridad con permisos mínimos.**
-El proyecto se inició con las reglas de Firestore en modo de prueba, que permiten lectura y
-escritura a cualquiera y expiran automáticamente a los 30 días. Al vencer, la aplicación dejó de
-recuperar el catálogo y devolvía `Missing or insufficient permissions`.
+**Estado de compra en memoria.**
+La acción de compra modifica el estado del componente en React y la interfaz se actualiza
+automáticamente, sin recargar la página ni escribir en Firestore. El botón de reinicio devuelve el
+estado inicial. Es una decisión deliberada de alcance: la compra demuestra el flujo de estado y el
+re-renderizado reactivo, no es una transacción persistida. Persistir órdenes exigiría una colección
+propia, reglas de escritura y validación del lado del servidor.
 
-Se reemplazaron por reglas explícitas por colección, en lugar de volver a abrir la base:
+**Capa de servicios separada de los componentes.**
+Las consultas a Firestore viven en `src/services/productService.js`, no dentro de los componentes.
+Las pantallas importan `getProducts` y `getProductById` sin saber que detrás hay Firebase, de modo
+que cambiar el origen de datos no obliga a tocar la interfaz. El mismo archivo conserva comentada
+una implementación anterior contra un JSON local, que fue exactamente ese cambio de origen.
+
+**Imágenes delegadas a ImgBB.**
+El alta de productos sube el archivo a ImgBB por su API REST y guarda en Firestore únicamente la
+URL resultante. Esto evita depender de Firebase Storage, que en el plan gratuito requiere
+configuración adicional, y mantiene los documentos livianos.
+
+**CSS con nombres de clase acotados por componente.**
+Vite reúne todas las hojas de estilo importadas en un único CSS global, sin ámbito por componente.
+Dos archivos distintos que definan la misma clase colisionan, y gana el que quede último en el
+paquete: así fue como la clase `.conteiner` de la pantalla de detalle terminó deformando las
+tarjetas del catálogo. Las reglas se reescribieron con nombres propios por componente
+(`.product-card`, `.product-detail`) y sin selectores de elemento sueltos, que eran globales y se
+aplicaban a toda la aplicación.
+
+---
+
+## Seguridad — estado actual
+
+El catálogo es de lectura pública, que es el comportamiento esperado de un e-commerce: se ve sin
+iniciar sesión.
+
+La escritura, en cambio, **no está protegida**. La aplicación crea productos sin pedir credenciales
+porque no hay autenticación implementada, de modo que las reglas de Firestore del proyecto deben
+permitir la escritura sin autenticar para que el formulario funcione. Cualquiera que conozca el
+identificador del proyecto puede escribir en la colección.
+
+Lo mismo aplica a las dos claves incluidas en el repositorio: la configuración de Firebase en
+`config/firebase.js` y la clave de la API de ImgBB en `CreateProductScreen.jsx`. La config web de
+Firebase es pública por diseño —viaja al navegador en cualquier caso, y lo que protege la base son
+las reglas, no el secreto de esa clave—, pero la de ImgBB sí es una credencial de servicio y no
+debería estar versionada.
+
+El cierre de este punto es el mismo trabajo: implementar Firebase Authentication, restringir la
+escritura a usuarios autenticados y mover la clave de ImgBB a una variable de entorno.
 
 ```javascript
+// Reglas de Firestore a aplicar una vez implementada la autenticación
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -127,50 +186,50 @@ service cloud.firestore {
 }
 ```
 
-La lectura es pública porque un catálogo de e-commerce está pensado para verse sin iniciar sesión.
-La escritura queda restringida a usuarios autenticados, de modo que nadie pueda alterar precios o
-productos manipulando peticiones desde el navegador sin haber iniciado sesión.
-
-**Estado de compra en memoria.**
-La acción de compra modifica el estado del componente en React y la interfaz se actualiza
-automáticamente, sin recargar la página ni escribir en Firestore. El botón de reinicio devuelve
-el estado inicial. Es una decisión deliberada de alcance: la compra es una demostración del flujo
-de estado y del re-renderizado reactivo, no una transacción persistida. Persistir órdenes exigiría
-una colección propia con reglas de escritura y validación del lado del servidor, que quedó fuera
-del alcance de este trabajo y figura en las mejoras pendientes.
-
-**Credenciales en variables de entorno.**
-La configuración de Firebase no está escrita directamente en el código, sino en variables de
-entorno. Aunque la config web de Firebase es pública por diseño —viaja al navegador en cualquier
-caso—, mantenerla fuera del repositorio permite usar distintos proyectos para desarrollo y
-producción sin tocar el código.
-
-**Autenticación delegada.**
-No se implementó manejo propio de contraseñas. Firebase Authentication se encarga del hash, el
-almacenamiento y la validación de credenciales, que es exactamente el tipo de problema donde una
-implementación casera introduce vulnerabilidades.
-
 ---
 
 ## Estructura del proyecto
 
 ```
-├── config/           # configuración de Firebase
-├── public/           # archivos estáticos
-├── src/              # componentes, vistas y lógica de la aplicación
+├── config/
+│   └── firebase.js             # inicialización de Firebase y Firestore
+├── public/                     # archivos estáticos
+├── src/
+│   ├── Components/             # Navbar, ProductCard, ProductList,
+│   │                           # BotonComprar, Contador, Login, Registro
+│   ├── Screens/                # Home, ProductDetail, CreateProduct, Contact
+│   ├── services/
+│   │   └── productService.js   # consultas a Firestore
+│   ├── App.jsx                 # definición de rutas
+│   └── main.jsx                # punto de entrada, monta el ruteador
 ├── index.html
-├── vercel.json       # configuración de despliegue
+├── vercel.json                 # reescrituras para el ruteo del lado del cliente
 └── vite.config.js
 ```
+
+`config/` queda fuera de `src/` y los componentes lo importan subiendo niveles
+(`../../../config/firebase`), una ruta frágil ante cualquier movimiento de archivos.
 
 ---
 
 ## Mejoras pendientes
 
-- Carrito de compras con persistencia de órdenes en Firestore.
-- Rutas protegidas en la interfaz para ocultar el alta de productos a usuarios no autenticados.
-- Validación de formularios con mensajes de error por campo.
-- Mejoras de accesibilidad y diseño responsive.
+- **Autenticación con Firebase Authentication**, conectando los formularios de registro y login,
+  que hoy son solo maquetas.
+- **Restringir la escritura en Firestore** a usuarios autenticados, una vez exista autenticación.
+- **Mover la clave de la API de ImgBB** a una variable de entorno y quitarla del repositorio.
+- **Rutas protegidas** que oculten el alta de productos a usuarios no autenticados.
+- **Normalizar los tipos** de `real_price` y `discount` a número antes de escribir en Firestore.
+- **Validación de formularios** con mensajes de error por campo.
+- **Resolver los componentes sin uso**: asignarle una ruta a `ContactScreen` o quitarla, y lo
+  mismo con `Contador`, que no se renderiza en ninguna pantalla.
+- **Agregar `eslint.config.js`**: el script `npm run lint` está declarado en `package.json` pero no
+  hay configuración de ESLint en el repositorio, así que hoy falla.
+- **Calcular el precio final fuera del renderizado**: el formulario de alta lo asigna dentro del
+  JSX, un efecto colateral durante el render que conviene mover a un manejador o a un valor
+  derivado.
+- **Carrito de compras** con persistencia de órdenes en Firestore.
+- **Accesibilidad**: etiquetas asociadas a sus campos y textos alternativos revisados.
 
 ---
 
